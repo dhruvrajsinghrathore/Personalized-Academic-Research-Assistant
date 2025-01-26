@@ -61,14 +61,5 @@ The **Personalized Academic Research Assistant** is an intelligent tool designed
 
 ---
 
-### **Contributions**
-We welcome contributions to improve the project. Please open an issue or submit a pull request with your suggestions.
-
----
-
 ### **License**
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
----
-
-This Markdown file effectively highlights the project's scope, features, and workflow while emphasizing the skills and processes involved. It’s professional and ideal for showcasing on GitHub. Let me know if you'd like further modifications!
