@@ -1,63 +1,74 @@
 # **Personalized Academic Research Assistant**
 
 ### **Project Overview**
-The **Personalized Academic Research Assistant** is an intelligent tool designed to streamline academic research. It retrieves relevant academic papers, ranks them based on contextual relevance, and generates concise summaries, providing researchers with key insights efficiently.
+The **Personalized Academic Research Assistant** is an intelligent tool designed to streamline academic research. It retrieves relevant academic papers, ranks them based on semantic relevance, and generates concise summaries, helping researchers quickly understand complex topics.
 
 ---
 
 ### **Key Features**
+
 1. **Academic Paper Retrieval**  
-   - Fetches relevant papers from academic databases like arXiv using embeddings and **FAISS** for efficient search.  
-   - Supports custom research queries to narrow down results.  
+   - Fetches relevant papers in real-time from the **arXiv API** using keyword-based search.  
+   - Stores and indexes abstracts using **FAISS** and **sentence-transformer embeddings** for fast semantic search.
 
-2. **BERT Ranking**  
-   - Ranks retrieved papers using a fine-tuned **BERT model** (e.g., SciBERT) trained on scientific datasets.  
-   - Ensures the most contextually relevant papers are prioritized.
+2. **Semantic Ranking with SciBERT**  
+   - Uses a pre-trained **SciBERT model** to rank retrieved papers based on textual similarity to the user’s query.  
+   - Prioritizes documents with higher semantic relevance, even if they don’t share exact words.
 
-3. **Summary Generation**  
-   - Leverages **Ollama3.2**, a cutting-edge large language model, to generate concise summaries for each paper.  
-   - Offers quick insights into complex research topics.
+3. **Summary Generation with LLM**  
+   - Leverages **Ollama's LLaMA 3.2** model via **LangChain** to generate simplified summaries of top-ranked papers.  
+   - Produces concise explanations tailored to the user’s query.
 
-4. **Advanced Query Handling**  
-   - Supports multi-turn dialogues to refine search results and answer follow-up questions using **LangChain**.  
-   - Enhances user experience by enabling conversational interactions.
+4. **User-Driven Query Input**  
+   - Allows the user to input custom queries that are used to retrieve and rank papers from the local FAISS store.  
+   - Highlights how the same dataset can be queried with different angles without redownloading data.
 
 ---
 
 ### **Skills Demonstrated**
-- **RAG (Retrieval-Augmented Generation)**: Combines retrieval and LLM-based generation for accurate and context-aware results.  
-- **Document Retrieval**: Efficiently retrieves relevant papers using **FAISS** and embeddings.  
-- **Summarization**: Generates human-readable summaries for dense academic content using LLMs.  
-- **Ranking**: Implements fine-tuned **BERT models** to rank papers based on relevance.  
-- **LangChain Orchestration**: Integrates retrieval, ranking, and summarization into a seamless pipeline.
+
+- **Retrieval-Augmented Generation (RAG)**: Combines vector-based document retrieval with LLM-based summarization.  
+- **Document Embedding**: Uses **sentence-transformers/all-MiniLM-L6-v2** to encode abstracts into vector space.  
+- **Semantic Search**: Implements **FAISS** for scalable similarity-based retrieval.  
+- **Relevance Ranking**: Applies **SciBERT** with softmax scoring to detect which documents are most contextually similar.  
+- **LLM Summarization**: Uses LangChain and Ollama to generate human-readable summaries.  
+- **LangChain Integration**: Seamlessly connects all modules into a unified processing pipeline.
 
 ---
 
 ### **Code Workflow**
 
 #### **1. Data Preparation**
-- Utilize datasets like arXiv Academic Papers or research PDFs.
-- Clean and preprocess text data, extracting titles, abstracts, and other metadata.
+- Scrape academic paper abstracts from the **arXiv API** using a keyword-based query.
+- Extract and store metadata including title, abstract, and PDF URL in a structured CSV.
 
-#### **2. Document Embeddings**
-- Generate embeddings for paper abstracts using **sentence-transformers/scibert**.  
-- Store these embeddings in **FAISS**, a high-performance similarity search library, for fast retrieval.
+#### **2. Document Embedding**
+- Use **sentence-transformers/all-MiniLM-L6-v2** to generate vector embeddings from each abstract.  
+- Store embeddings in a **FAISS index** for efficient semantic retrieval.
 
-#### **3. Pipeline Integration**
-- Combine the following components into a unified workflow using **LangChain**:
-  1. **Retrieval**: Search the FAISS index for relevant papers based on a user query.  
-  2. **Ranking**: Score and rank results using a fine-tuned **BERT model** to prioritize contextual relevance.  
-  3. **Summarization**: Pass top-ranked papers to **Ollama3.2** for concise summary generation.
+#### **3. Retrieval & Ranking**
+- **Retrieval**: Given a user query (can be different from the original scrape keyword), find the most semantically similar abstracts from FAISS.  
+- **Ranking**: Use **SciBERT** (trained on scientific data) to score and sort the top results based on relevance to the query.
 
-#### **4. Advanced Query Support**
-- Enable follow-up questions and multi-turn dialogue handling through LangChain’s conversational capabilities.
+#### **4. Summarization**
+- The top 3 ranked papers are passed through a **LangChain-based RetrievalQA pipeline** using **Ollama (LLaMA 3.2)**.  
+- Each result is returned with:
+  - Paper title  
+  - PDF link  
+  - Abstract  
+  - Generated summary
+
+#### **5. Output Saving**
+- Final results are saved into:
+  - **Markdown file** (`top_summarized_papers.md`)
 
 ---
 
 ### **Future Enhancements**
-- Expand support for additional datasets like PubMed and IEEE Xplore.
-- Integrate PDF parsing for offline research papers.
-- Incorporate fine-tuning capabilities for domain-specific queries.
+- Add support for downloading and parsing full paper PDFs using the arXiv `pdf_url`.
+- Enable contradiction or claim-matching by comparing current statements with past publications (e.g., fake statement detection).
+- Support additional academic sources (PubMed, IEEE Xplore).
+- Build a Streamlit UI for interactive querying and visualization.
 
 ---
 
